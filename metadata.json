@@ -1,0 +1,6 @@
+{
+  "name": "LEFA AI",
+  "description": "Human-facing governed financial intelligence companion for the Alpaca AI Trading Agents Hackathon. Observe → Ledger → Reveal.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
