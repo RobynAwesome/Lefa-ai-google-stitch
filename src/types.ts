@@ -4,6 +4,8 @@ export type DesignDirection = 'direction-a' | 'direction-b' | 'direction-c' | 'c
 
 export type ViewportMode = 'mobile' | 'desktop' | 'dual';
 
+export type ExperienceMode = 'design-preview' | 'runtime';
+
 export type SovereignDecision = 'APPROVE' | 'HOLD' | 'REJECT';
 export type SovereignProofState = 'LOCAL_RECEIPT' | 'EXTERNAL_RECEIPT';
 
@@ -32,6 +34,14 @@ export interface SovereignDecisionReceipt {
   proof_state: SovereignProofState;
 }
 
+export interface SovereignProviderObservation {
+  code: string;
+  account_status: string;
+  account_blocked: boolean | null;
+  trading_blocked: boolean | null;
+  trade_suspended_by_user: boolean | null;
+}
+
 export interface SovereignBridgeStatus {
   schema: 'kopano.lefa.sovereign-bridge-status.v1';
   provider: 'alpaca';
@@ -40,6 +50,8 @@ export interface SovereignBridgeStatus {
   execution_authority: 'BACKEND_ONLY';
   observed_at: string;
   latest_receipt: SovereignDecisionReceipt | null;
+  provider_observation?: SovereignProviderObservation;
+  truth_boundary?: string;
 }
 
 export interface KaomojiExpression {
