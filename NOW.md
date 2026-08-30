@@ -1,35 +1,42 @@
 # NOW.md — LEFA AI Google Stitch
 
-**Updated:** 2026-08-30  
+**Updated:** 2026-08-30T23:28:00+02:00  
 **Lane:** Alpaca AI Trading Agents Hackathon  
-**State:** `POC-2 / ADAPTIVE_RUNTIME_CONVERGENCE`  
-**Current issue:** `RobynAwesome/Lefa-ai-google-stitch#5`  
-**Active branch:** `feat/runtime-living-companion`  
+**State:** `POC-2_MERGED / DEPLOYMENT_WITNESS_LIVE / PAPER_BRIDGE_HOLD`  
 **Authority rule:** `REALITY_STATE > INDEX_STATE`  
 **Execution rule:** `RECEIPT OR HOLD`
 
 ## Current objective
 
-Converge the APWA workflow lesson into LEFA without creating a second product or a new backend lane:
+Ship LEFA as **one adaptive character-first application** before the deadline.
 
 > **Same LEFA. Different evidence conditions. The presentation adapts; financial truth does not.**
 
-POC-1 correctly separated synthetic Stitch preview state from runtime truth. POC-2 keeps that truth boundary but removes the remaining UX split where Runtime Truth fell back to a generic ledger/dashboard surface instead of the character-first Living Companion.
+The APWA reference is admitted as a UI/UX/GUI workflow pattern — context-aware presentation, continuity, resilient state, and bounded adaptation — **not as a separate LEFA product or a second frontend architecture**.
 
 ## Introduction-to-MCP transition receipt
 
 `trigger -> evidence -> invariant -> authority -> transition -> receipt`
 
-- **Trigger:** human correction that the APWA reference is a UI/UX/GUI workflow pattern for LEFA deployment.
-- **Evidence:** current Stitch contains the strongest character-first visual system; runtime bridge contracts are already fail-closed; `RobynAwesome/lefa-ai` owns the governed truth contracts; Sovereign Hub owns server-side PAPER authority.
-- **Invariant:** `HOLD` is first-class; UI projection cannot manufacture backend truth; reusable APWA/adaptive behavior is a capability pattern, not a reason to duplicate products.
-- **Authority:** human owner explicitly requested re-evaluation through `RobynAwesome/Introduction-to-MCP` because the hackathon deadline is close.
+- **Trigger:** human correction that APWA is a workflow reference for LEFA deployment.
+- **Evidence:** Google Stitch owns the strongest character-first presentation; POC-1 already fenced synthetic preview state from receipt-derived runtime truth; `RobynAwesome/lefa-ai` owns governed contracts/provider truth; Sovereign Hub owns server-side PAPER authority.
+- **Invariant:** `HOLD` is first-class; UI projection cannot manufacture backend truth; adaptive/APWA behavior is a reusable capability pattern; deadline pressure does not authorize duplicate architecture.
+- **Authority:** human owner.
 - **Transition:** **CONVERGE**.
-- **Receipt:** Issue #5 + branch `feat/runtime-living-companion` + exact-head CI before merge.
+- **Receipt:** Issue #5, PR #6, PR #7, exact-head CI, Vercel runtime witness.
 
-## POC-2 runtime UI law
+## POC-2 — merged
 
-Runtime state is derived only from `SovereignBridgeStatus` / canonical `SovereignDecisionReceipt`:
+**Issue #5:** `POC-2: converge runtime truth into the Living Companion adaptive workflow`
+
+**PR #6:** `POC-2: adaptive runtime Living Companion convergence`
+- merged as `edeaf1a5355e3408da16ee868a09fbe78a7537fa`;
+- validated head `c30505c41cf603d96eba4ed72052c79b3d6e6ed9`;
+- GitHub Actions run `33336153166`, job `99323296773`: **SUCCESS**;
+- TypeScript validation: **PASS**;
+- production Vite build: **PASS**.
+
+Runtime UI law now remains character-first:
 
 ```text
 no verified bridge
@@ -48,92 +55,83 @@ no outcome evidence
   -> TIME waiting / REVEAL not claimed
 ```
 
-The runtime companion uses the existing canonical `assets/companion/lefa-companion-root.svg` identity from `RobynAwesome/lefa-ai`, copied into this presentation repository for deployment. The Stitch-generated portrait remains design-preview material rather than silently becoming runtime canon.
+Runtime never falls back to `MOCK_*` data. Design Preview remains visibly `SYNTHETIC / NON-LIVE` and is the only lane where manual state simulation is allowed.
+
+## Deployment artifact receipt
+
+**PR #7:** `ci: publish validated LEFA dist artifact for Vercel`
+- merged as `2f091264b057964ee9358361d9758bbc8f881910`;
+- validated head `f39643bb648152e74bebe3002f52fbb43c33a1d0`;
+- GitHub Actions run `33336293755`, job `99323666262`: **SUCCESS**;
+- TypeScript validation: **PASS**;
+- production build: **PASS**;
+- artifact upload: **PASS**;
+- artifact: `lefa-dist`, id `9739123222`;
+- artifact digest: `sha256:803b3f66d318525968c16446eebd8042cb0b58b468befab801cb19c56596da6c`;
+- retention: 1 day.
+
+Deployment law:
+
+`GitHub source -> exact-head CI -> validated dist -> Vercel`
+
+Vercel must remain a delivery surface, not an alternative implementation authority.
+
+## Live Vercel witness
+
+A bounded runtime witness is live for immediate UI/UX validation:
+
+- project: `lefa-ai-live`;
+- project id: `prj_RMEYZ8bs7gF8Eq8tBDt127hLaWX4`;
+- deployment id: `dpl_FNZL9j99HtWkJbZTdEGqKMWwbRo3`;
+- production alias: `https://lefa-ai-live.vercel.app`;
+- deployment state: **READY**;
+- HTTP witness: **200 OK**.
+
+**Classification:** `POC_WITNESS`, not yet the final Git-linked/validated-dist production receipt. It proves the adaptive companion workflow can be viewed live; it does **not** prove the current Sovereign Hub bridge or Alpaca PAPER account runtime.
+
+The live witness defaults to Runtime Truth and exposes Design Preview only behind an explicit synthetic boundary. Browser/network/device observations may adjust presentation budget only; they do not create financial state or execution authority.
 
 ## Repository topology — deadline lock
 
-- `RobynAwesome/Lefa-ai-google-stitch` = **human-facing UI/UX/GUI + Vercel presentation surface**.
-- `RobynAwesome/lefa-ai` = **governed contracts/provider/presentation semantics + hackathon truth boundary**.
+- `RobynAwesome/Lefa-ai-google-stitch` = **human-facing UI/UX/GUI + deployable Vercel presentation surface**.
+- `RobynAwesome/lefa-ai` = **governed contracts, provider boundary, observation receipts, presentation semantics, hackathon truth boundary**.
 - `RobynAwesome/kopano-sovereign-hub` = **server-side Alpaca PAPER observation, deterministic decision receipt, and any execution authority**.
-- `RobynAwesome/Introduction-to-MCP` = **governance / transition filter**.
+- `RobynAwesome/Introduction-to-MCP` = **governance / PKA transition filter**.
 
-Do not build another LEFA frontend in `lefa-ai` for the deadline. Converge the proven Stitch surface instead.
+**Do not build another deadline frontend in `lefa-ai`.** Its existing UI POC is a governed semantics/reference surface, not the deployment lane to compete with Stitch.
 
-## POC-0 — merged
+## Deployment truth / HOLD
 
-LEFA PR #2 merged as `1ad3e9a871c079a8ea7ba84a88a47daab87751db`.
+The connected Vercel estate contains `kopano-sovereign-hub`, but it is not Git-linked and its known deployments predate the merged LEFA status bridge. Therefore:
 
-It established:
+- current Sovereign Hub deployment is **NOT sufficient evidence** for the merged bridge;
+- live Alpaca PAPER bridge remains **HOLD**;
+- no live balance/equity/P&L/position/order/fill claim is admitted;
+- missing canonical decision receipt must render as **HOLD**, not synthetic completion.
 
-1. no Alpaca credentials in the browser;
-2. paper-only competition boundary;
-3. no timeout/mock connection success;
-4. typed `kopano.alpaca.decision-receipt.v1` support;
-5. fail-closed `kopano.lefa.sovereign-bridge-status.v1` verification;
-6. browser execution authority fixed to `BACKEND_ONLY`;
-7. TypeScript + production build CI.
+Required deployment configuration:
 
-Sovereign Hub PR #42 subsequently merged as `54e23333e12382d6ed0a3b6a5744eb7a57986efd`, implementing `GET /api/lefa/alpaca-status` as the corresponding server-side Alpaca PAPER observation boundary.
-
-## POC-1 — merged
-
-PR #4 merged as `76ad8e3fbc3a5f452c5d634ef8db1a01e6ea3c9a` and established two explicit experience modes:
-
-```text
-RUNTIME
-  -> bridge status from Sovereign backend only
-  -> canonical decision receipt only
-  -> no manual state promotion
-  -> no MOCK_* fallback
-  -> missing receipt = explicit HOLD display
-
-DESIGN_PREVIEW
-  -> Google Stitch directions A/B/C + matrix
-  -> synthetic state simulator retained
-  -> visibly marked SYNTHETIC / NON-LIVE
-  -> never treated as account, market, decision, P&L, or order truth
-```
-
-## Deployment truth
-
-The connected Vercel estate contains a `kopano-sovereign-hub` project, but it is not Git-linked and its known deployments predate the merged LEFA status bridge. There is still no Git-linked LEFA Stitch Vercel project in the connected project list.
-
-Required deployment configuration remains:
-
-### Sovereign Hub server environment
+### Sovereign Hub server-only environment
 
 - `ALPACA_API_KEY`
 - `ALPACA_SECRET_KEY`
 - `LEFA_ALLOWED_ORIGIN`
 
-### LEFA build environment
+### LEFA public build configuration
 
 - `VITE_LEFA_SOVEREIGN_STATUS_URL=<deployed Hub origin>/api/lefa/alpaca-status`
 
-No Alpaca secret may ever be placed in `VITE_*`.
+**Never place Alpaca secrets in `VITE_*`.**
 
-## External execution gates still unresolved
+## Next admissible action — deadline path
 
-LEFA must not imply these are known until canonical receipts exist:
-
-- competition account current equity;
-- immutable starting-equity proof exactly `$100,000`;
-- Level 3 options entitlement;
-- current positions / portfolio defined risk;
-- fresh post-open option quotes and Greeks;
-- deterministic proposal approval;
-- accepted provider order/fill receipt;
-- P&L telemetry.
-
-## Next safe action
-
-1. Complete POC-2 companion-first runtime convergence.
-2. Run exact-head TypeScript + production build CI; merge only if green.
-3. Deploy **this Stitch repository** as the LEFA Vercel presentation surface.
-4. Deploy/wire current Sovereign Hub source with server-only secrets.
-5. Configure only `VITE_LEFA_SOVEREIGN_STATUS_URL` in the LEFA build.
-6. Verify the live PAPER bridge; missing decision receipt must remain HOLD.
-7. Only after runtime evidence exists, continue Ledger → Time → Reveal.
+1. Use `https://lefa-ai-live.vercel.app` immediately for mobile/desktop UI witness and screenshots.
+2. Deploy current `kopano-sovereign-hub` source with server-only PAPER credentials and allowed LEFA origin.
+3. Prove `GET /api/lefa/alpaca-status` from the deployed Hub.
+4. Wire only the public status URL into the full Stitch Vite deployment.
+5. Verify LEFA transitions `DISCONNECTED -> HOLD/LEDGERED` from real bridge/receipt evidence without screen rewrites.
+6. Keep `TIME` and `REVEAL` on HOLD until later outcome evidence actually exists.
+7. Do not open a new engine/frontend architecture lane before the submission-ready POC is captured.
 
 `DESIGN_PREVIEW != RUNTIME_TRUTH`  
 `Frontend tells the story.`  
