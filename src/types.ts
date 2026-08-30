@@ -4,6 +4,44 @@ export type DesignDirection = 'direction-a' | 'direction-b' | 'direction-c' | 'c
 
 export type ViewportMode = 'mobile' | 'desktop' | 'dual';
 
+export type SovereignDecision = 'APPROVE' | 'HOLD' | 'REJECT';
+export type SovereignProofState = 'LOCAL_RECEIPT' | 'EXTERNAL_RECEIPT';
+
+export interface SovereignDecisionReason {
+  severity: SovereignDecision;
+  code: string;
+  message: string;
+}
+
+export interface SovereignDecisionReceipt {
+  schema: 'kopano.alpaca.decision-receipt.v1';
+  timestamp: string;
+  cycle_id: string;
+  observation: unknown;
+  proposal: unknown;
+  evaluation: {
+    decision: SovereignDecision;
+    reasons: SovereignDecisionReason[];
+    metrics?: Record<string, unknown>;
+  };
+  tool_intent: unknown | null;
+  provider_result: unknown | null;
+  kc_receipt_id: string;
+  evidence_sha256: string;
+  provider_receipt_id: string | null;
+  proof_state: SovereignProofState;
+}
+
+export interface SovereignBridgeStatus {
+  schema: 'kopano.lefa.sovereign-bridge-status.v1';
+  provider: 'alpaca';
+  environment: 'paper';
+  bridge_state: 'VERIFIED' | 'HOLD';
+  execution_authority: 'BACKEND_ONLY';
+  observed_at: string;
+  latest_receipt: SovereignDecisionReceipt | null;
+}
+
 export interface KaomojiExpression {
   symbol: string;
   name: string;
