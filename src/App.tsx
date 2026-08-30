@@ -3,9 +3,15 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { SystemState, DesignDirection, ViewportMode } from './types';
+import type {
+  DesignDirection,
+  ExperienceMode,
+  SovereignBridgeStatus,
+  SystemState,
+  ViewportMode,
+} from './types';
 import { StateSimulatorBar } from './components/StateSimulatorBar';
 import { DirectionA } from './components/DirectionA';
 import { DirectionB } from './components/DirectionB';
@@ -15,23 +21,26 @@ import { CritiqueModal } from './components/CritiqueModal';
 import { ExpressionCodexModal } from './components/ExpressionCodexModal';
 import { DesignSystemSpec } from './components/DesignSystemSpec';
 import { AlpacaConnectModal } from './components/AlpacaConnectModal';
+import { PreviewTruthBanner } from './components/PreviewTruthBanner';
+import { RuntimeTruthView } from './components/RuntimeTruthView';
 
 export default function App() {
+  const [experienceMode, setExperienceMode] = useState<ExperienceMode>('runtime');
   const [currentState, setCurrentState] = useState<SystemState>('disconnected');
   const [activeDirection, setActiveDirection] = useState<DesignDirection>('canvas-matrix');
   const [viewportMode, setViewportMode] = useState<ViewportMode>('desktop');
   const [reducedMotion, setReducedMotion] = useState(false);
   const [soundEnabled, setSoundEnabled] = useState(false);
-  const [isAlpacaConnected, setIsAlpacaConnected] = useState(false);
+  const [bridgeStatus, setBridgeStatus] = useState<SovereignBridgeStatus | null>(null);
 
-  // Modals
   const [isCritiqueOpen, setIsCritiqueOpen] = useState(false);
   const [isCodexOpen, setIsCodexOpen] = useState(false);
   const [isDesignDocOpen, setIsDesignDocOpen] = useState(false);
   const [isConnectModalOpen, setIsConnectModalOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
-  // Optional subtle harmonic tone synthesized via Web Audio API on state transition
+  const isAlpacaConnected = bridgeStatus?.bridge_state === 'VERIFIED';
+
   const playStateChime = useCallback((state: SystemState) => {
     if (!soundEnabled || typeof window === 'undefined') return;
     try {
@@ -39,13 +48,13 @@ export default function App() {
       const ctx = new AudioCtx();
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
-      
+
       const freqs: Record<SystemState, number> = {
         disconnected: 220,
         observing: 392,
-        ledgered: 523.25, // C5
-        hold: 329.63,     // E4
-        reveal: 659.25    // E5
+        ledgered: 523.25,
+        hold: 329.63,
+        reveal: 659.25,
       };
 
       osc.type = 'sine';
@@ -58,39 +67,39 @@ export default function App() {
       osc.start();
       osc.stop(ctx.currentTime + 0.6);
     } catch {
-      // Audio context might be restricted before user gesture; gracefully ignore
+      // Design-preview audio is optional and must never affect runtime truth.
     }
   }, [soundEnabled]);
 
   const handleStateChange = (newState: SystemState) => {
+    // This handler is reachable only from DESIGN_PREVIEW controls/components.
     setCurrentState(newState);
     playStateChime(newState);
   };
 
-  const handleConnectSuccess = () => {
-    setIsAlpacaConnected(true);
-    setCurrentState('observing');
+  const handleConnectSuccess = (status: SovereignBridgeStatus) => {
+    setBridgeStatus(status);
+    setExperienceMode('runtime');
     setToastMessage('Sovereign paper bridge verified ╰(*°▽°*)╯');
     setTimeout(() => setToastMessage(null), 3000);
   };
 
   const handleDisconnect = () => {
-    setIsAlpacaConnected(false);
-    setCurrentState('disconnected');
-    setToastMessage('Sovereign bridge disconnected. Returning to unpopulated truth state.');
+    setBridgeStatus(null);
+    setToastMessage('Sovereign bridge disconnected. Runtime truth is unpopulated.');
     setTimeout(() => setToastMessage(null), 3000);
   };
 
   const handlePreviewKaomoji = (kaomoji: string) => {
-    setToastMessage(`Expression Preview: ${kaomoji}`);
+    setToastMessage(`Design Preview Expression: ${kaomoji}`);
     setTimeout(() => setToastMessage(null), 2500);
   };
 
   return (
     <div className="min-h-screen bg-[#09090b] text-[#f4f4f5] font-sans flex flex-col selection:bg-[#d4af37]/30 selection:text-[#fef08a] antialiased">
-      
-      {/* Top Global State & Direction Navigation Bar */}
       <StateSimulatorBar
+        experienceMode={experienceMode}
+        onExperienceModeChange={setExperienceMode}
         currentState={currentState}
         onStateChange={handleStateChange}
         activeDirection={activeDirection}
@@ -106,82 +115,87 @@ export default function App() {
         onOpenDesignDoc={() => setIsDesignDocOpen(true)}
       />
 
-      {/* Main Viewport Workspace */}
       <main className="flex-1 flex flex-col items-center justify-center p-4 sm:p-6 lg:p-8">
-        
-        {/* Dynamic Canvas Container */}
         <div className="w-full max-w-7xl mx-auto flex flex-col items-center justify-center">
-          
-          {activeDirection === 'canvas-matrix' && (
-            <CanvasMatrix
-              state={currentState}
-              onStateChange={handleStateChange}
-              onSelectDirection={(dir) => {
-                setActiveDirection(dir);
-                setViewportMode('desktop');
-              }}
+          {experienceMode === 'runtime' ? (
+            <RuntimeTruthView
+              bridgeStatus={bridgeStatus}
               onOpenConnectModal={() => setIsConnectModalOpen(true)}
-              isAlpacaConnected={isAlpacaConnected}
-              reducedMotion={reducedMotion}
-              onOpenCritiqueModal={() => setIsCritiqueOpen(true)}
             />
-          )}
+          ) : (
+            <div className="w-full space-y-5">
+              <PreviewTruthBanner />
 
-          {activeDirection === 'direction-a' && (
-            <div className={`w-full transition-all duration-300 ${viewportMode === 'mobile' ? 'max-w-[420px]' : 'max-w-4xl'}`}>
-              <div className="mb-3 flex items-center justify-between text-xs font-mono text-zinc-400">
-                <span className="text-[#e5c158]">Focus: Direction A — Living Companion</span>
-                <span>Viewport: {viewportMode === 'mobile' ? '~390px Mobile Native' : 'Responsive Desktop'}</span>
-              </div>
-              <DirectionA
-                state={currentState}
-                onStateChange={handleStateChange}
-                viewportMode={viewportMode}
-                onOpenConnectModal={() => setIsConnectModalOpen(true)}
-                isAlpacaConnected={isAlpacaConnected}
-                reducedMotion={reducedMotion}
-              />
+              {activeDirection === 'canvas-matrix' && (
+                <CanvasMatrix
+                  state={currentState}
+                  onStateChange={handleStateChange}
+                  onSelectDirection={(dir) => {
+                    setActiveDirection(dir);
+                    setViewportMode('desktop');
+                  }}
+                  onOpenConnectModal={() => setIsConnectModalOpen(true)}
+                  isAlpacaConnected={false}
+                  reducedMotion={reducedMotion}
+                  onOpenCritiqueModal={() => setIsCritiqueOpen(true)}
+                />
+              )}
+
+              {activeDirection === 'direction-a' && (
+                <div className={`w-full transition-all duration-300 ${viewportMode === 'mobile' ? 'max-w-[420px] mx-auto' : 'max-w-4xl mx-auto'}`}>
+                  <div className="mb-3 flex items-center justify-between text-xs font-mono text-zinc-400">
+                    <span className="text-[#e5c158]">Focus: Direction A — Living Companion</span>
+                    <span>Viewport: {viewportMode === 'mobile' ? '~390px Mobile Native' : 'Responsive Desktop'}</span>
+                  </div>
+                  <DirectionA
+                    state={currentState}
+                    onStateChange={handleStateChange}
+                    viewportMode={viewportMode}
+                    onOpenConnectModal={() => setIsConnectModalOpen(true)}
+                    isAlpacaConnected={false}
+                    reducedMotion={reducedMotion}
+                  />
+                </div>
+              )}
+
+              {activeDirection === 'direction-b' && (
+                <div className={`w-full transition-all duration-300 ${viewportMode === 'mobile' ? 'max-w-[420px] mx-auto' : 'max-w-4xl mx-auto'}`}>
+                  <div className="mb-3 flex items-center justify-between text-xs font-mono text-zinc-400">
+                    <span className="text-[#e5c158]">Focus: Direction B — Living Ledger</span>
+                    <span>Viewport: {viewportMode === 'mobile' ? '~390px Mobile Native' : 'Responsive Desktop'}</span>
+                  </div>
+                  <DirectionB
+                    state={currentState}
+                    onStateChange={handleStateChange}
+                    viewportMode={viewportMode}
+                    onOpenConnectModal={() => setIsConnectModalOpen(true)}
+                    isAlpacaConnected={false}
+                    reducedMotion={reducedMotion}
+                  />
+                </div>
+              )}
+
+              {activeDirection === 'direction-c' && (
+                <div className={`w-full transition-all duration-300 ${viewportMode === 'mobile' ? 'max-w-[420px] mx-auto' : 'max-w-4xl mx-auto'}`}>
+                  <div className="mb-3 flex items-center justify-between text-xs font-mono text-zinc-400">
+                    <span className="text-[#e5c158]">Focus: Direction C — Conversational Control Room</span>
+                    <span>Viewport: {viewportMode === 'mobile' ? '~390px Mobile Native' : 'Responsive Desktop'}</span>
+                  </div>
+                  <DirectionC
+                    state={currentState}
+                    onStateChange={handleStateChange}
+                    viewportMode={viewportMode}
+                    onOpenConnectModal={() => setIsConnectModalOpen(true)}
+                    isAlpacaConnected={false}
+                    reducedMotion={reducedMotion}
+                  />
+                </div>
+              )}
             </div>
           )}
-
-          {activeDirection === 'direction-b' && (
-            <div className={`w-full transition-all duration-300 ${viewportMode === 'mobile' ? 'max-w-[420px]' : 'max-w-4xl'}`}>
-              <div className="mb-3 flex items-center justify-between text-xs font-mono text-zinc-400">
-                <span className="text-[#e5c158]">Focus: Direction B — Living Ledger</span>
-                <span>Viewport: {viewportMode === 'mobile' ? '~390px Mobile Native' : 'Responsive Desktop'}</span>
-              </div>
-              <DirectionB
-                state={currentState}
-                onStateChange={handleStateChange}
-                viewportMode={viewportMode}
-                onOpenConnectModal={() => setIsConnectModalOpen(true)}
-                isAlpacaConnected={isAlpacaConnected}
-                reducedMotion={reducedMotion}
-              />
-            </div>
-          )}
-
-          {activeDirection === 'direction-c' && (
-            <div className={`w-full transition-all duration-300 ${viewportMode === 'mobile' ? 'max-w-[420px]' : 'max-w-4xl'}`}>
-              <div className="mb-3 flex items-center justify-between text-xs font-mono text-zinc-400">
-                <span className="text-[#e5c158]">Focus: Direction C — Conversational Control Room</span>
-                <span>Viewport: {viewportMode === 'mobile' ? '~390px Mobile Native' : 'Responsive Desktop'}</span>
-              </div>
-              <DirectionC
-                state={currentState}
-                onStateChange={handleStateChange}
-                viewportMode={viewportMode}
-                onOpenConnectModal={() => setIsConnectModalOpen(true)}
-                isAlpacaConnected={isAlpacaConnected}
-                reducedMotion={reducedMotion}
-              />
-            </div>
-          )}
-
         </div>
       </main>
 
-      {/* Floating Micro-Toast for State Transitions */}
       <AnimatePresence>
         {toastMessage && (
           <motion.div
@@ -196,13 +210,13 @@ export default function App() {
         )}
       </AnimatePresence>
 
-      {/* Interactive Modals */}
       <CritiqueModal
         isOpen={isCritiqueOpen}
         onClose={() => setIsCritiqueOpen(false)}
         onSelectDirection={(dir) => {
           setActiveDirection(dir);
           setViewportMode('desktop');
+          setExperienceMode('design-preview');
         }}
       />
 
@@ -225,7 +239,6 @@ export default function App() {
         onConnectSuccess={handleConnectSuccess}
         onDisconnect={handleDisconnect}
       />
-
     </div>
   );
 }
