@@ -22,7 +22,7 @@ import { ExpressionCodexModal } from './components/ExpressionCodexModal';
 import { DesignSystemSpec } from './components/DesignSystemSpec';
 import { AlpacaConnectModal } from './components/AlpacaConnectModal';
 import { PreviewTruthBanner } from './components/PreviewTruthBanner';
-import { RuntimeTruthView } from './components/RuntimeTruthView';
+import { RuntimeCompanionView } from './components/RuntimeCompanionView';
 
 export default function App() {
   const [experienceMode, setExperienceMode] = useState<ExperienceMode>('runtime');
@@ -118,9 +118,10 @@ export default function App() {
       <main className="flex-1 flex flex-col items-center justify-center p-4 sm:p-6 lg:p-8">
         <div className="w-full max-w-7xl mx-auto flex flex-col items-center justify-center">
           {experienceMode === 'runtime' ? (
-            <RuntimeTruthView
+            <RuntimeCompanionView
               bridgeStatus={bridgeStatus}
               onOpenConnectModal={() => setIsConnectModalOpen(true)}
+              reducedMotion={reducedMotion}
             />
           ) : (
             <div className="w-full space-y-5">
