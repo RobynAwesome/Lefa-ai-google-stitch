@@ -70,14 +70,14 @@ export default function App() {
   const handleConnectSuccess = () => {
     setIsAlpacaConnected(true);
     setCurrentState('observing');
-    setToastMessage('Alpaca Paper Sandbox Verified (●\'◡\'●)');
+    setToastMessage('Sovereign paper bridge verified ╰(*°▽°*)╯');
     setTimeout(() => setToastMessage(null), 3000);
   };
 
   const handleDisconnect = () => {
     setIsAlpacaConnected(false);
     setCurrentState('disconnected');
-    setToastMessage('Alpaca Disconnected. Returning to unpopulated truth state.');
+    setToastMessage('Sovereign bridge disconnected. Returning to unpopulated truth state.');
     setTimeout(() => setToastMessage(null), 3000);
   };
 
