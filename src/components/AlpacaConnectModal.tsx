@@ -30,7 +30,7 @@ export const AlpacaConnectModal: React.FC<AlpacaConnectModalProps> = ({
     const result = await verifySovereignBridge();
     setIsVerifying(false);
 
-    if (result.ok === false) {
+    if ('message' in result) {
       setVerificationMessage(result.message);
       return;
     }
