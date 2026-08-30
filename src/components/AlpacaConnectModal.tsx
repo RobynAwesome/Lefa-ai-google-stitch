@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import { X, Shield, CheckCircle2, Lock, ArrowRight, AlertTriangle } from 'lucide-react';
 import { verifySovereignBridge } from '../sovereignBridge';
+import type { SovereignBridgeStatus } from '../types';
 
 interface AlpacaConnectModalProps {
   isOpen: boolean;
   onClose: () => void;
   isConnected: boolean;
-  onConnectSuccess: () => void;
+  onConnectSuccess: (status: SovereignBridgeStatus) => void;
   onDisconnect: () => void;
 }
 
@@ -35,7 +36,7 @@ export const AlpacaConnectModal: React.FC<AlpacaConnectModalProps> = ({
       return;
     }
 
-    onConnectSuccess();
+    onConnectSuccess(result.status);
     onClose();
   };
 
